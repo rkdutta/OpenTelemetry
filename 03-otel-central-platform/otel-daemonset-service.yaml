@@ -1,9 +1,11 @@
 apiVersion: opentelemetry.io/v1alpha1
 kind: OpenTelemetryCollector
 metadata:
-  name: otel-sidecar-service
+  name: otel-daemonset-service
+  namespace: kube-system
 spec:
-  mode: sidecar
+  hostNetwork: true
+  mode: daemonset
   config: |
     receivers:
       otlp:
@@ -12,11 +14,14 @@ spec:
     exporters:
       logging:
       otlp:
-        endpoint: otel-local-service-collector:4317
+        endpoint: otel-remote-service-collector.observability.svc.cluster.local:4317
         tls:
           insecure: true
     service:
       pipelines:
         traces:
-          receivers: [otlp]
-          exporters: [logging,otlp]
+          receivers:
+          - "otlp"
+          exporters:
+          - "logging"
+          - otlp

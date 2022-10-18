@@ -3,15 +3,16 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: front-service
-  name: front-service
+    app: customer-service
+  name: customer-service
+  namespace: app-a
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      app: front-service
+      app: customer-service
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -19,16 +20,16 @@ spec:
     type: RollingUpdate
   template:
     metadata:
+      labels:
+        app: customer-service
       annotations:
         sidecar.opentelemetry.io/inject: "true"
         instrumentation.opentelemetry.io/inject-java: "true"
-      labels:
-        app: front-service
     spec:
       containers:
-      - image: rduttaxebia/otel-demo-api-service
+      - image: rduttaxebia/otel-demo-customer-service
         imagePullPolicy: Always
-        name: otel-demo-api-service
+        name: otel-demo-customer-service
         resources: {}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
@@ -45,8 +46,8 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: front-service
-  name: front-service
+    app: customer-service
+  name: customer-service
   namespace: app-a
 spec:
   internalTrafficPolicy: Cluster
@@ -54,10 +55,10 @@ spec:
   - IPv4
   ipFamilyPolicy: SingleStack
   ports:
-  - port: 8080
+  - port: 8081
     protocol: TCP
-    targetPort: 8080
+    targetPort: 8081
   selector:
-    app: front-service
+    app: customer-service
   sessionAffinity: None
   type: ClusterIP

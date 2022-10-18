@@ -2,6 +2,7 @@ apiVersion: opentelemetry.io/v1alpha1
 kind: OpenTelemetryCollector
 metadata:
   name: otel-remote-service
+  namespace: observability
 spec:
   mode: deployment
   config: |
@@ -20,9 +21,13 @@ spec:
       jaeger:
         endpoint: "jaeger-collector.observability.svc:14250"   
         tls:
-          insecure: true   
+          insecure: true  
+      zipkin:
+        endpoint: "http://zipkin.observability.svc:9411/api/v2/spans"
+        tls:
+          insecure: true
     service:
       pipelines:
         traces:
           receivers: [otlp]
-          exporters: [logging,jaeger,otlp]
+          exporters: [logging,jaeger,otlp,zipkin]

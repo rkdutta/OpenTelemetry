@@ -1,19 +1,19 @@
 apiVersion: opentelemetry.io/v1alpha1
 kind: OpenTelemetryCollector
 metadata:
-  name: otel-local-service
+  name: otel-sidecar-service
+  namespace: app-a
 spec:
-  mode: deployment
+  mode: sidecar
   config: |
     receivers:
       otlp:
         protocols:
           grpc:
-          http:
     exporters:
       logging:
       otlp:
-        endpoint: otel-remote-service-collector.observability.svc.cluster.local:4317
+        endpoint: otel-local-service-collector:4317
         tls:
           insecure: true
     service:

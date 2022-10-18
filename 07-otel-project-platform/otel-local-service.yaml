@@ -1,15 +1,16 @@
 apiVersion: opentelemetry.io/v1alpha1
 kind: OpenTelemetryCollector
 metadata:
-  name: otel-daemonset-service
+  name: otel-local-service
+  namespace: app-a
 spec:
-  hostNetwork: true
-  mode: daemonset
+  mode: deployment
   config: |
     receivers:
       otlp:
         protocols:
           grpc:
+          http:
     exporters:
       logging:
       otlp:
@@ -19,8 +20,5 @@ spec:
     service:
       pipelines:
         traces:
-          receivers:
-          - "otlp"
-          exporters:
-          - "logging"
-          - otlp
+          receivers: [otlp]
+          exporters: [logging,otlp]
