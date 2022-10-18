@@ -1,6 +1,8 @@
 
 # Step by Step Demo for OpenTelemtry  
 
+In this demo we are going to setup a kubernetes cluster using kind and deploy 2 spring-boot apis. Then we will implement tracing using OpenTelemetry. The reliability platform setup is loosly coupled and distributed. In the end you should be able to see tracing information from the kubernetes core components and apis. 
+
 ## 00 - Setting up a kubernetes cluster using kind on Docker
 Command:
 ```text
