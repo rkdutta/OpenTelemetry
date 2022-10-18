@@ -1,7 +1,7 @@
 apiVersion: opentelemetry.io/v1alpha1
 kind: OpenTelemetryCollector
 metadata:
-  name: otel-collector-deployment
+  name: otel-remote-service
 spec:
   mode: deployment
   config: |
@@ -11,13 +11,18 @@ spec:
           grpc:
           http:
     exporters:
+      otlp:
+        endpoint: "api.honeycomb.io:443"
+        headers:
+          "x-honeycomb-team": "7293a0eacd64d2b880063342dd18ce6a"
+          "x-honeycomb-dataset": "k8-Trace-Date"
       logging:
       jaeger:
-        endpoint: "jaeger-collector.default.svc.cluster.local:14250"   
+        endpoint: "jaeger-collector.observability.svc:14250"   
         tls:
           insecure: true   
     service:
       pipelines:
         traces:
           receivers: [otlp]
-          exporters: [logging,jaeger]
+          exporters: [logging,jaeger,otlp]

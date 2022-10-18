@@ -1,0 +1,26 @@
+apiVersion: opentelemetry.io/v1alpha1
+kind: OpenTelemetryCollector
+metadata:
+  name: otel-daemonset-service
+spec:
+  hostNetwork: true
+  mode: daemonset
+  config: |
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+    exporters:
+      logging:
+      otlp:
+        endpoint: otel-remote-service-collector.observability.svc.cluster.local:4317
+        tls:
+          insecure: true
+    service:
+      pipelines:
+        traces:
+          receivers:
+          - "otlp"
+          exporters:
+          - "logging"
+          - otlp

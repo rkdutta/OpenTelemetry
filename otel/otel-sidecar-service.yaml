@@ -1,7 +1,7 @@
 apiVersion: opentelemetry.io/v1alpha1
 kind: OpenTelemetryCollector
 metadata:
-  name: otel-collector-sidecar
+  name: otel-sidecar-service
 spec:
   mode: sidecar
   config: |
@@ -10,9 +10,13 @@ spec:
         protocols:
           grpc:
     exporters:
-      logging: debug
+      logging:
+      otlp:
+        endpoint: otel-local-service-collector:4317
+        tls:
+          insecure: true
     service:
       pipelines:
         traces:
-          receivers: [oltp]
-          exporters: [logging]
+          receivers: [otlp]
+          exporters: [logging,otlp]
