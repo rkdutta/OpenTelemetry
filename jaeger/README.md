@@ -7,7 +7,7 @@ kubectl create -f https://github.com/jaegertracing/jaeger-operator/releases/down
 
 ### Deploy Jaeger
 ```
-kubectl create -f simple-jaeger.yaml
+kubectl create -f jaeger.yaml
 ```
 
 ### Port forwarding
