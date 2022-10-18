@@ -15,7 +15,7 @@ spec:
       otlp:
         endpoint: "api.honeycomb.io:443"
         headers:
-          "x-honeycomb-team": "7293a0eacd64d2b880063342dd18ce6a"
+          "x-honeycomb-team": "<api-key>"
           "x-honeycomb-dataset": "k8-Trace-Date"
       logging:
       jaeger:
@@ -30,4 +30,4 @@ spec:
       pipelines:
         traces:
           receivers: [otlp]
-          exporters: [logging,jaeger,otlp,zipkin]
+          exporters: [logging,jaeger,zipkin]
